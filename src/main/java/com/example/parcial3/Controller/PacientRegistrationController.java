@@ -1,10 +1,10 @@
 package com.example.parcial3.Controller;
 
+import com.example.parcial3.App.HospitalManager;
 import com.example.parcial3.Model.Patient;
 import com.example.parcial3.Model.Person;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 public class PacientRegistrationController {
@@ -16,16 +16,13 @@ public class PacientRegistrationController {
     private TextField AgeField;
     @FXML
     private TextField genderField;
-    @FXML
-    private Label welcomeText;
 
-
-    private void showAlert(String title, String content) {
-        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-        errorAlert.setTitle(title);
-        errorAlert.setHeaderText(null);
-        errorAlert.setContentText(content);
-        errorAlert.showAndWait();
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     @FXML
@@ -35,13 +32,14 @@ public class PacientRegistrationController {
         String Age = AgeField.getText().trim();
         String gender = genderField.getText().trim();
 
+
         if (name.isEmpty() || Id.isEmpty() || gender.isEmpty() || Age.isEmpty()) {
-            showAlert("Error de Validación", "Por favor, complete todos los campos.");
+            showAlert(Alert.AlertType.ERROR, "Error de Validación", "Por favor, complete todos los campos.");
             return;
         }
 
-        if (!name.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+")) {
-            showAlert("Error de Formato", "El campo Nombre solo debe contener letras.");
+        if (!name.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]{2,40}$")) {
+            showAlert(Alert.AlertType.ERROR, "Error de Formato", "El campo Nombre debe contener solo letras y espacios, con una longitud de 2 a 40 caracteres.");
             return;
         }
 
@@ -49,34 +47,30 @@ public class PacientRegistrationController {
         try {
             patientAge = Integer.parseInt(Age);
             if (patientAge <= 0 || patientAge > 120) {
-                showAlert("Error de Formato", "La Edad debe ser un número positivo y realista.");
+                showAlert(Alert.AlertType.ERROR, "Error de Formato", "La Edad debe ser un número positivo y realista (1-120 años).");
                 return;
             }
         } catch (NumberFormatException e) {
-            showAlert("Error de Formato", "El campo Edad debe ser un número entero válido.");
-            return; // <-- Cierre del try-catch
+            showAlert(Alert.AlertType.ERROR, "Error de Formato", "El campo Edad debe ser un número entero válido.");
+            return;
         }
 
-        if (!Id.matches("[a-zA-Z0-9\\s]+")) {
-            showAlert("Error de Formato", "El campo ID/Cédula solo debe contener letras y números.");
+        if (!Id.matches("^[0-9]{5,15}$")) {
+            showAlert(Alert.AlertType.ERROR, "Error de Formato", "El campo ID/Cédula debe contener solo números, con una longitud de 5 a 15 dígitos.");
             return;
         }
 
         if (!gender.equalsIgnoreCase("hombre") && !gender.equalsIgnoreCase("mujer")) {
-            showAlert("Error de Validación", "El Género debe ser 'hombre' o 'mujer'.");
+            showAlert(Alert.AlertType.ERROR, "Error de Validación", "El Género debe ser 'hombre' o 'mujer'.");
             return;
         }
 
         Person newPacient = new Patient(Id, name, gender, patientAge);
+        HospitalManager.getInstance().addPatient((Patient) newPacient);
 
-        System.out.println("Nuevo Paciente Registrado:");
-        System.out.println(newPacient.toString());
+        System.out.println("Nuevo Paciente Registrado:\n" + newPacient.toString());
 
-        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-        successAlert.setTitle("Registro Exitoso");
-        successAlert.setHeaderText(null);
-        successAlert.setContentText("El paciente " + name + " ha sido registrado correctamente.");
-        successAlert.showAndWait();
+        showAlert(Alert.AlertType.INFORMATION, "Registro Exitoso", "El paciente " + name + " ha sido registrado correctamente.");
 
         nameField.clear();
         IdField.clear();

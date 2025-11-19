@@ -1,5 +1,6 @@
 package com.example.parcial3.Controller;
 
+import com.example.parcial3.App.HospitalManager;
 import com.example.parcial3.Model.Doctor;
 import com.example.parcial3.Model.Person;
 import javafx.fxml.FXML;
@@ -36,15 +37,15 @@ public class DoctorRegistrationController {
             return;
         }
 
-        if (!name.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+")) {
-            showAlert("Error de Formato", "El campo Nombre solo debe contener letras.");
+        if (!name.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]{2,40}$")) {
+            showAlert("Error de Formato", "El campo Nombre debe contener solo letras y espacios, con una longitud de 2 a 40 caracteres.");
             return;
         }
 
         Integer doctorAge;
         try {
             doctorAge = Integer.parseInt(Age);
-            if (doctorAge <= 22 || doctorAge > 80) { // Edad mínima y máxima razonable para un doctor
+            if (doctorAge < 22 || doctorAge > 80) {
                 showAlert("Error de Formato", "La Edad debe ser un número positivo y realista (22-80 años).");
                 return;
             }
@@ -53,8 +54,8 @@ public class DoctorRegistrationController {
             return;
         }
 
-        if (!Id.matches("[a-zA-Z0-9\\s]+")) {
-            showAlert("Error de Formato", "El campo ID/Cédula solo debe contener letras y números.");
+        if (!Id.matches("^[0-9]{5,15}$")) {
+            showAlert("Error de Formato", "El campo ID/Cédula debe contener solo números, con una longitud de 5 a 15 dígitos.");
             return;
         }
 
@@ -64,9 +65,9 @@ public class DoctorRegistrationController {
         }
 
         Person newDoctor = new Doctor(Id, name, gender, doctorAge);
+        HospitalManager.getInstance().addDoctor((Doctor) newDoctor);
 
-        System.out.println("Nuevo Médico Registrado:");
-        System.out.println(newDoctor.toString());
+        System.out.println("Nuevo Médico Registrado:\n" + newDoctor.toString());
 
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
         successAlert.setTitle("Registro Exitoso");
