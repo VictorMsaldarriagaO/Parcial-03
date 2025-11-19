@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane fx:id="Main" prefHeight="650.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.parcial3.Controller.MainController">
+    <left>
+        <VBox alignment="CENTER" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #2c3e50;" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="20" bottom="20" left="10" right="10"/>
+            </padding>
+            <Label text="MENÚ CLÍNICA" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: white;">
+                <VBox.margin>
+                    <Insets bottom="10.0" />
+                </VBox.margin>
+            </Label>
+
+            <Button onAction="#showPatientRegistration" prefWidth="180.0" text="Pacientes" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;" />
+
+            <Button onAction="#showDoctorRegistration" prefWidth="180.0" text="Médicos" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;" />
+
+            <Button onAction="#showAppointmentRegistration" prefWidth="180.0" text="Asignar Cita" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;" />
+
+            <VBox VBox.vgrow="ALWAYS" /> <Button onAction="#onSalir" prefWidth="180.0" text="Salir" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;" />
+        </VBox>
+    </left>
+    <center>
+        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+            <Label text="Bienvenido al Sistema de Gestión de Citas de la Clínica" style="-fx-font-size: 18px; -fx-text-fill: #34495e;" />
+            <Label text="Seleccione una opción del menú lateral para comenzar." style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;">
+                <VBox.margin>
+                    <Insets top="10.0" />
+                </VBox.margin>
+            </Label>
+        </VBox>
+    </center>
+</BorderPane>
